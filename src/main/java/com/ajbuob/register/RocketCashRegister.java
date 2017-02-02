@@ -73,13 +73,13 @@ public class RocketCashRegister implements CashRegister {
         if (!canRemoveAllBillsToRegister(debitBills)) {
             throw new IllegalArgumentException("Cant remove this quantity of bills to the register");
         }
-
+        //Iterate over input and remove each denomination and quantity from the register
         for (Map.Entry<BillDenomination, Integer> entry : debitBills.entrySet()) {
-            removeBillToRegister(entry.getKey(), entry.getValue());
+            removeBillFromRegister(entry.getKey(), entry.getValue());
         }
     }
 
-    private void removeBillToRegister(BillDenomination bill, Integer quantity) {
+    private void removeBillFromRegister(BillDenomination bill, Integer quantity) {
         //Remove the quantity from the current value in the register
         register.put(bill, register.get(bill) - quantity);
     }
@@ -142,7 +142,6 @@ public class RocketCashRegister implements CashRegister {
 
         //Iterate over the register to compute the total amount
         for (Map.Entry<BillDenomination, Integer> entry : register.entrySet()) {
-
             total = total + entry.getKey().getAmount() * entry.getValue();
         }
         return total;
