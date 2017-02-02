@@ -70,7 +70,7 @@ public class RocketCashRegister implements CashRegister {
     @Override
     public void removeBillsFromRegister(Map<BillDenomination, Integer> debitBills) {
         //Validate the input
-        if (!canRemoveAllBillsToRegister(debitBills)) {
+        if (!canRemoveAllBillsFromRegister(debitBills)) {
             throw new IllegalArgumentException("Cant remove this quantity of bills to the register");
         }
         //Iterate over input and remove each denomination and quantity from the register
@@ -84,7 +84,7 @@ public class RocketCashRegister implements CashRegister {
         register.put(bill, register.get(bill) - quantity);
     }
 
-    private boolean canRemoveAllBillsToRegister(Map<BillDenomination, Integer> debitBills) {
+    private boolean canRemoveAllBillsFromRegister(Map<BillDenomination, Integer> debitBills) {
         //Iterate over the Map and look for any negative values
         // or values strictly larger than what is in the current register
         for (Map.Entry<BillDenomination, Integer> entry : debitBills.entrySet()) {
