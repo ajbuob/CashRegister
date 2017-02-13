@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -43,7 +44,8 @@ public class CashRegisterTestImpl {
 
     @Test
     public void testAddBillsToRegisterNegative() {
-        final String EXPECTED_CONTENTS = "Total=$0 $20x0 $10x0 $5x0 $2x0 $1x0";
+        final CashRegister EXPECTED_REGISTER = new CashRegisterImpl();
+        //final String EXPECTED_CONTENTS = "Total=$0 $20x0 $10x0 $5x0 $2x0 $1x0";
         final String EX_MSG_ADD = "Cant add this quantity of bills to the register";
 
         //Populate the cash register
@@ -57,14 +59,20 @@ public class CashRegisterTestImpl {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining(EX_MSG_ADD);
 
-        assertThat(cashRegisterSuccess.getRegisterContents()).isEqualTo(EXPECTED_CONTENTS);
+        assertThat(cashRegisterSuccess).isEqualTo(EXPECTED_REGISTER);
         assertThat(cashRegisterSuccess.getRegisterTotal()).isEqualTo(ZERO);
     }
 
     @Test
     public void testAddBillsToRegisterZero() {
+        final CashRegister EXPECTED_REGISTER = new CashRegisterImpl();
+        final TreeMap<BillDenomination, Integer> register = new TreeMap<>();
+        register.put(BillDenomination.TEN, 3);
+        register.put(BillDenomination.TWO, 3);
+        register.put(BillDenomination.ONE, 6);
 
-        final String EXPECTED_CONTENTS = "Total=$42 $20x0 $10x3 $5x0 $2x3 $1x6";
+        EXPECTED_REGISTER.addBillsToRegister(register);
+        //final String EXPECTED_CONTENTS = "Total=$42 $20x0 $10x3 $5x0 $2x3 $1x6";
 
         //Populate the cash register
         Map<BillDenomination, Integer> creditBills = new HashMap<BillDenomination, Integer>();
@@ -75,7 +83,7 @@ public class CashRegisterTestImpl {
 
         cashRegisterSuccess.addBillsToRegister(creditBills);
         assertThat(cashRegisterSuccess.getRegisterTotal()).isEqualTo(42);
-        assertThat(cashRegisterSuccess.getRegisterContents()).isEqualTo(EXPECTED_CONTENTS);
+        assertThat(cashRegisterSuccess).isEqualTo(EXPECTED_REGISTER);
     }
 
     @Test
@@ -92,7 +100,16 @@ public class CashRegisterTestImpl {
 
     @Test
     public void testRemoveBillsFromRegisterNegative() {
-        final String EXPECTED_CONTENTS = "Total=$47 $20x0 $10x4 $5x0 $2x2 $1x3";
+        final CashRegister EXPECTED_REGISTER = new CashRegisterImpl();
+
+        final TreeMap<BillDenomination, Integer> register = new TreeMap<>();
+        register.put(BillDenomination.TEN, 4);
+        register.put(BillDenomination.TWO, 2);
+        register.put(BillDenomination.ONE, 3);
+
+        EXPECTED_REGISTER.addBillsToRegister(register);
+
+        //final String EXPECTED_CONTENTS = "Total=$47 $20x0 $10x4 $5x0 $2x2 $1x3";
         final String EX_MSG_REMOVE = "Cant remove this quantity of bills to the register";
 
         //Populate the cash register
@@ -103,7 +120,7 @@ public class CashRegisterTestImpl {
 
         cashRegisterSuccess.addBillsToRegister(creditBills);
         assertThat(cashRegisterSuccess.getRegisterTotal()).isEqualTo(47);
-        assertThat(cashRegisterSuccess.getRegisterContents()).isEqualTo(EXPECTED_CONTENTS);
+        assertThat(cashRegisterSuccess).isEqualTo(EXPECTED_REGISTER);
 
         Map<BillDenomination, Integer> debitBills = new HashMap<BillDenomination, Integer>();
         debitBills.put(BillDenomination.TWENTY, -1);
@@ -117,13 +134,22 @@ public class CashRegisterTestImpl {
 
         //Register is not changed after trying to remove negative quantity
         assertThat(cashRegisterSuccess.getRegisterTotal()).isEqualTo(47);
-        assertThat(cashRegisterSuccess.getRegisterContents()).isEqualTo(EXPECTED_CONTENTS);
+        assertThat(cashRegisterSuccess).isEqualTo(EXPECTED_REGISTER);
     }
 
 
     @Test
     public void testRemoveBillsFromRegisterZero() {
-        final String EXPECTED_CONTENTS = "Total=$21 $20x0 $10x0 $5x2 $2x3 $1x5";
+        final CashRegister EXPECTED_REGISTER = new CashRegisterImpl();
+
+        final TreeMap<BillDenomination, Integer> register = new TreeMap<>();
+        register.put(BillDenomination.FIVE, 2);
+        register.put(BillDenomination.TWO, 3);
+        register.put(BillDenomination.ONE, 5);
+
+        EXPECTED_REGISTER.addBillsToRegister(register);
+
+        //final String EXPECTED_CONTENTS = "Total=$21 $20x0 $10x0 $5x2 $2x3 $1x5";
 
         //Populate the cash register
         Map<BillDenomination, Integer> creditBills = new HashMap<BillDenomination, Integer>();
@@ -133,7 +159,7 @@ public class CashRegisterTestImpl {
 
         cashRegisterSuccess.addBillsToRegister(creditBills);
         assertThat(cashRegisterSuccess.getRegisterTotal()).isEqualTo(21);
-        assertThat(cashRegisterSuccess.getRegisterContents()).isEqualTo(EXPECTED_CONTENTS);
+        assertThat(cashRegisterSuccess).isEqualTo(EXPECTED_REGISTER);
 
         //Try to remove a quantity of zero fives
         Map<BillDenomination, Integer> debitBills = new HashMap<BillDenomination, Integer>();
@@ -142,14 +168,31 @@ public class CashRegisterTestImpl {
 
         //Register is not changed after trying to remove zero quantity
         assertThat(cashRegisterSuccess.getRegisterTotal()).isEqualTo(21);
-        assertThat(cashRegisterSuccess.getRegisterContents()).isEqualTo(EXPECTED_CONTENTS);
+        assertThat(cashRegisterSuccess).isEqualTo(EXPECTED_REGISTER);
     }
 
     @Test
     public void testRemoveBillsFromRegister() {
 
-        final String EXPECTED_CONTENTS_BEFORE = "Total=$65 $20x0 $10x6 $5x0 $2x0 $1x5";
-        final String EXPECTED_CONTENTS_AFTER = "Total=$45 $20x0 $10x4 $5x0 $2x0 $1x5";
+        final CashRegister EXPECTED_REGISTER_BEFORE = new CashRegisterImpl();
+
+        final TreeMap<BillDenomination, Integer> registerBefore = new TreeMap<>();
+        registerBefore.put(BillDenomination.TEN, 6);
+        registerBefore.put(BillDenomination.ONE, 5);
+
+        EXPECTED_REGISTER_BEFORE.addBillsToRegister(registerBefore);
+
+        //final String EXPECTED_CONTENTS_BEFORE = "Total=$65 $20x0 $10x6 $5x0 $2x0 $1x5";
+
+        final CashRegister EXPECTED_REGISTER_AFTER = new CashRegisterImpl();
+
+        final TreeMap<BillDenomination, Integer> registerAfter = new TreeMap<>();
+        registerAfter.put(BillDenomination.TEN, 4);
+        registerAfter.put(BillDenomination.ONE, 5);
+
+        EXPECTED_REGISTER_AFTER.addBillsToRegister(registerAfter);
+
+        //final String EXPECTED_CONTENTS_AFTER = "Total=$45 $20x0 $10x4 $5x0 $2x0 $1x5";
 
         //Populate the cash register
         Map<BillDenomination, Integer> creditBills = new HashMap<BillDenomination, Integer>();
@@ -158,7 +201,7 @@ public class CashRegisterTestImpl {
 
         cashRegisterSuccess.addBillsToRegister(creditBills);
         assertThat(cashRegisterSuccess.getRegisterTotal()).isEqualTo(65);
-        assertThat(cashRegisterSuccess.getRegisterContents()).isEqualTo(EXPECTED_CONTENTS_BEFORE);
+        assertThat(cashRegisterSuccess).isEqualTo(EXPECTED_REGISTER_BEFORE);
 
         //Remove a quantity of 2 tens
         Map<BillDenomination, Integer> debitBills = new HashMap<BillDenomination, Integer>();
@@ -167,7 +210,7 @@ public class CashRegisterTestImpl {
 
         //Check contents after
         assertThat(cashRegisterSuccess.getRegisterTotal()).isEqualTo(45);
-        assertThat(cashRegisterSuccess.getRegisterContents()).isEqualTo(EXPECTED_CONTENTS_AFTER);
+        assertThat(cashRegisterSuccess).isEqualTo(EXPECTED_REGISTER_AFTER);
     }
 
     @Test
@@ -208,8 +251,24 @@ public class CashRegisterTestImpl {
 
     @Test
     public void testCanMakeChangeSuccessIntegration() {
-        final String EXPECTED_CONTENTS_BEFORE = "Total=$11 $20x0 $10x0 $5x0 $2x4 $1x3";
-        final String EXPECTED_CONTENTS_AFTER = "Total=$2 $20x0 $10x0 $5x0 $2x0 $1x2";
+        final CashRegister EXPECTED_REGISTER_BEFORE = new CashRegisterImpl();
+
+        final TreeMap<BillDenomination, Integer> registerBefore = new TreeMap<>();
+        registerBefore.put(BillDenomination.TWO, 4);
+        registerBefore.put(BillDenomination.ONE, 3);
+
+        EXPECTED_REGISTER_BEFORE.addBillsToRegister(registerBefore);
+
+        //final String EXPECTED_CONTENTS_BEFORE = "Total=$11 $20x0 $10x0 $5x0 $2x4 $1x3";
+
+        final CashRegister EXPECTED_REGISTER_AFTER = new CashRegisterImpl();
+
+        final TreeMap<BillDenomination, Integer> registerAfter = new TreeMap<>();
+        registerAfter.put(BillDenomination.ONE, 2);
+
+        EXPECTED_REGISTER_AFTER.addBillsToRegister(registerAfter);
+
+        //final String EXPECTED_CONTENTS_AFTER = "Total=$2 $20x0 $10x0 $5x0 $2x0 $1x2";
 
         //Populate the cash register
         Map<BillDenomination, Integer> creditBills = new HashMap<BillDenomination, Integer>();
@@ -218,7 +277,7 @@ public class CashRegisterTestImpl {
         cashRegister.addBillsToRegister(creditBills);
 
         assertThat(cashRegister.getRegisterTotal()).isEqualTo(11);
-        assertThat(cashRegister.getRegisterContents()).isEqualTo(EXPECTED_CONTENTS_BEFORE);
+        assertThat(cashRegister).isEqualTo(EXPECTED_REGISTER_BEFORE);
 
         assertThat(cashRegister.canMakeChange(9)).isTrue();
 
@@ -230,7 +289,7 @@ public class CashRegisterTestImpl {
 
         //Ensure that the correct amount was removed from the register
         assertThat(cashRegister.getRegisterTotal()).isEqualTo(2);
-        assertThat(cashRegister.getRegisterContents()).isEqualTo(EXPECTED_CONTENTS_AFTER);
+        assertThat(cashRegister).isEqualTo(EXPECTED_REGISTER_AFTER);
     }
 
 }

@@ -4,6 +4,7 @@ import com.ajbuob.register.enums.BillDenomination;
 import com.ajbuob.register.exception.InsufficientFundsException;
 import com.ajbuob.register.strategy.ChangeStrategy;
 import com.ajbuob.register.strategy.OptimalChangeStrategy;
+import com.google.common.base.Objects;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -153,12 +154,19 @@ public class CashRegisterImpl implements CashRegister {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hashCode(register);
     }
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CashRegisterImpl other = (CashRegisterImpl) obj;
+        return this.getRegister().equals(other.getRegister());
     }
 
     @Override
