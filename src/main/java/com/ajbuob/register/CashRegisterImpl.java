@@ -11,7 +11,7 @@ import java.util.TreeMap;
 /**
  * Created by abuob on 1/31/17.
  */
-public class RocketCashRegister implements CashRegister {
+public class CashRegisterImpl implements CashRegister {
 
     private static final Integer ZERO = 0;
 
@@ -20,11 +20,11 @@ public class RocketCashRegister implements CashRegister {
     private ChangeStrategy changeStrategy = null;
     private static final ChangeStrategy DEFAULT_CHANGE_STRATEGY = new OptimalChangeStrategy();
 
-    public RocketCashRegister() {
+    public CashRegisterImpl() {
         this(DEFAULT_CHANGE_STRATEGY);
     }
 
-    public RocketCashRegister(ChangeStrategy changeStrategy) {
+    public CashRegisterImpl(ChangeStrategy changeStrategy) {
         initRegister();
         this.changeStrategy = changeStrategy;
     }
@@ -149,5 +149,20 @@ public class RocketCashRegister implements CashRegister {
 
     private TreeMap<BillDenomination, Integer> getRegister() {
         return register;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public String toString() {
+        return getRegisterContents();
     }
 }

@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by abuob on 1/31/17.
  */
-public class RocketCashRegisterTest {
+public class CashRegisterTestImpl {
 
     private CashRegister cashRegister = null;
     private CashRegister cashRegisterSuccess = null;
@@ -34,9 +34,9 @@ public class RocketCashRegisterTest {
 
     @Before
     public void setup() {
-        cashRegister = new RocketCashRegister(changeStrategy);
-        cashRegisterSuccess = new RocketCashRegister(changeStrategyMockSuccess);
-        cashRegisterFail = new RocketCashRegister(changeStrategyMockFailure);
+        cashRegister = new CashRegisterImpl(changeStrategy);
+        cashRegisterSuccess = new CashRegisterImpl(changeStrategyMockSuccess);
+        cashRegisterFail = new CashRegisterImpl(changeStrategyMockFailure);
         when(changeStrategyMockSuccess.canMakeChangeForAmount(anyObject(), anyInt())).thenReturn(true);
         when(changeStrategyMockFailure.canMakeChangeForAmount(anyObject(), anyInt())).thenReturn(false);
     }
