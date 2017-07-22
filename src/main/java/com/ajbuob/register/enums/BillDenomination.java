@@ -1,8 +1,5 @@
 package com.ajbuob.register.enums;
 
-/**
- * Created by abuob on 1/31/17.
- */
 public enum BillDenomination {
 
     ONE("one", 1),
@@ -14,7 +11,7 @@ public enum BillDenomination {
     private String description;
     private int amount;
 
-    private BillDenomination(String description, int amount) {
+    BillDenomination(String description, int amount) {
         this.description = description;
         this.amount = amount;
     }

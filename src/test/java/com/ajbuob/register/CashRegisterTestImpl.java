@@ -12,16 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by abuob on 1/31/17.
- */
 public class CashRegisterTestImpl {
 
     private CashRegister cashRegister = null;
@@ -38,8 +33,8 @@ public class CashRegisterTestImpl {
         cashRegister = new CashRegisterImpl(changeStrategy);
         cashRegisterSuccess = new CashRegisterImpl(changeStrategyMockSuccess);
         cashRegisterFail = new CashRegisterImpl(changeStrategyMockFailure);
-        when(changeStrategyMockSuccess.canMakeChangeForAmount(anyObject(), anyInt())).thenReturn(true);
-        when(changeStrategyMockFailure.canMakeChangeForAmount(anyObject(), anyInt())).thenReturn(false);
+        when(changeStrategyMockSuccess.canMakeChangeForAmount(any(TreeMap.class), anyInt())).thenReturn(true);
+        when(changeStrategyMockFailure.canMakeChangeForAmount(any(TreeMap.class), anyInt())).thenReturn(false);
     }
 
     @Test
@@ -49,7 +44,7 @@ public class CashRegisterTestImpl {
         final String EX_MSG_ADD = "Cant add this quantity of bills to the register";
 
         //Populate the cash register
-        Map<BillDenomination, Integer> creditBills = new HashMap<BillDenomination, Integer>();
+        Map<BillDenomination, Integer> creditBills = new HashMap<>();
         creditBills.put(BillDenomination.TWENTY, 5);
         creditBills.put(BillDenomination.TEN, -2);
 
@@ -75,7 +70,7 @@ public class CashRegisterTestImpl {
         //final String EXPECTED_CONTENTS = "Total=$42 $20x0 $10x3 $5x0 $2x3 $1x6";
 
         //Populate the cash register
-        Map<BillDenomination, Integer> creditBills = new HashMap<BillDenomination, Integer>();
+        Map<BillDenomination, Integer> creditBills = new HashMap<>();
         creditBills.put(BillDenomination.TEN, 3);
         creditBills.put(BillDenomination.FIVE, ZERO);
         creditBills.put(BillDenomination.TWO, 3);
@@ -88,7 +83,7 @@ public class CashRegisterTestImpl {
 
     @Test
     public void testAddBillsToRegister() {
-        Map<BillDenomination, Integer> creditBills = new HashMap<BillDenomination, Integer>();
+        Map<BillDenomination, Integer> creditBills = new HashMap<>();
         creditBills.put(BillDenomination.TWENTY, 4);
         creditBills.put(BillDenomination.FIVE, 3);
         creditBills.put(BillDenomination.ONE, 6);
@@ -113,7 +108,7 @@ public class CashRegisterTestImpl {
         final String EX_MSG_REMOVE = "Cant remove this quantity of bills to the register";
 
         //Populate the cash register
-        Map<BillDenomination, Integer> creditBills = new HashMap<BillDenomination, Integer>();
+        Map<BillDenomination, Integer> creditBills = new HashMap<>();
         creditBills.put(BillDenomination.TEN, 4);
         creditBills.put(BillDenomination.TWO, 2);
         creditBills.put(BillDenomination.ONE, 3);
@@ -122,7 +117,7 @@ public class CashRegisterTestImpl {
         assertThat(cashRegisterSuccess.getRegisterTotal()).isEqualTo(47);
         assertThat(cashRegisterSuccess).isEqualTo(EXPECTED_REGISTER);
 
-        Map<BillDenomination, Integer> debitBills = new HashMap<BillDenomination, Integer>();
+        Map<BillDenomination, Integer> debitBills = new HashMap<>();
         debitBills.put(BillDenomination.TWENTY, -1);
 
         //Try to remove a quantity of -1 twenties
@@ -152,7 +147,7 @@ public class CashRegisterTestImpl {
         //final String EXPECTED_CONTENTS = "Total=$21 $20x0 $10x0 $5x2 $2x3 $1x5";
 
         //Populate the cash register
-        Map<BillDenomination, Integer> creditBills = new HashMap<BillDenomination, Integer>();
+        Map<BillDenomination, Integer> creditBills = new HashMap<>();
         creditBills.put(BillDenomination.FIVE, 2);
         creditBills.put(BillDenomination.TWO, 3);
         creditBills.put(BillDenomination.ONE, 5);
@@ -162,7 +157,7 @@ public class CashRegisterTestImpl {
         assertThat(cashRegisterSuccess).isEqualTo(EXPECTED_REGISTER);
 
         //Try to remove a quantity of zero fives
-        Map<BillDenomination, Integer> debitBills = new HashMap<BillDenomination, Integer>();
+        Map<BillDenomination, Integer> debitBills = new HashMap<>();
         debitBills.put(BillDenomination.FIVE, 0);
         cashRegisterSuccess.removeBillsFromRegister(debitBills);
 
@@ -195,7 +190,7 @@ public class CashRegisterTestImpl {
         //final String EXPECTED_CONTENTS_AFTER = "Total=$45 $20x0 $10x4 $5x0 $2x0 $1x5";
 
         //Populate the cash register
-        Map<BillDenomination, Integer> creditBills = new HashMap<BillDenomination, Integer>();
+        Map<BillDenomination, Integer> creditBills = new HashMap<>();
         creditBills.put(BillDenomination.TEN, 6);
         creditBills.put(BillDenomination.ONE, 5);
 
@@ -204,7 +199,7 @@ public class CashRegisterTestImpl {
         assertThat(cashRegisterSuccess).isEqualTo(EXPECTED_REGISTER_BEFORE);
 
         //Remove a quantity of 2 tens
-        Map<BillDenomination, Integer> debitBills = new HashMap<BillDenomination, Integer>();
+        Map<BillDenomination, Integer> debitBills = new HashMap<>();
         debitBills.put(BillDenomination.TEN, 2);
         cashRegisterSuccess.removeBillsFromRegister(debitBills);
 
@@ -218,7 +213,7 @@ public class CashRegisterTestImpl {
         final String EX_MSG = "Change can't be made for the amount: 20";
 
         //Populate the cash register
-        Map<BillDenomination, Integer> creditBills = new HashMap<BillDenomination, Integer>();
+        Map<BillDenomination, Integer> creditBills = new HashMap<>();
         creditBills.put(BillDenomination.TEN, 1);
         creditBills.put(BillDenomination.ONE, 3);
         cashRegisterFail.addBillsToRegister(creditBills);
@@ -236,7 +231,7 @@ public class CashRegisterTestImpl {
         final String EX_MSG = "Change can't be made for the amount: 5";
 
         //Populate the cash register
-        Map<BillDenomination, Integer> creditBills = new HashMap<BillDenomination, Integer>();
+        Map<BillDenomination, Integer> creditBills = new HashMap<>();
         creditBills.put(BillDenomination.TEN, 1);
         creditBills.put(BillDenomination.TWO, 4);
         cashRegisterFail.addBillsToRegister(creditBills);
@@ -271,7 +266,7 @@ public class CashRegisterTestImpl {
         //final String EXPECTED_CONTENTS_AFTER = "Total=$2 $20x0 $10x0 $5x0 $2x0 $1x2";
 
         //Populate the cash register
-        Map<BillDenomination, Integer> creditBills = new HashMap<BillDenomination, Integer>();
+        Map<BillDenomination, Integer> creditBills = new HashMap<>();
         creditBills.put(BillDenomination.TWO, 4);
         creditBills.put(BillDenomination.ONE, 3);
         cashRegister.addBillsToRegister(creditBills);
@@ -291,5 +286,4 @@ public class CashRegisterTestImpl {
         assertThat(cashRegister.getRegisterTotal()).isEqualTo(2);
         assertThat(cashRegister).isEqualTo(EXPECTED_REGISTER_AFTER);
     }
-
 }

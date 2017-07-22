@@ -9,9 +9,6 @@ import com.google.common.base.Objects;
 import java.util.Map;
 import java.util.TreeMap;
 
-/**
- * Created by abuob on 1/31/17.
- */
 public class CashRegisterImpl implements CashRegister {
 
     private static final Integer ZERO = 0;
@@ -100,10 +97,7 @@ public class CashRegisterImpl implements CashRegister {
     public boolean canMakeChange(Integer amount) {
         //An amount larger than what is in the register or if the
         //provided strategy can not make change will indicate the cash register cant provide change
-        if (amount > getRegisterTotal() || !changeStrategy.canMakeChangeForAmount(getRegister(), amount)) {
-            return false;
-        }
-        return true;
+        return amount > getRegisterTotal() || !changeStrategy.canMakeChangeForAmount(getRegister(), amount);
     }
 
     @Override
@@ -127,11 +121,11 @@ public class CashRegisterImpl implements CashRegister {
     public String getRegisterContents() {
         StringBuilder contents = new StringBuilder();
 
-        contents.append("Total=$" + getRegisterTotal());
+        contents.append("Total=$").append(getRegisterTotal());
 
         //Iterate over register and add the contents of each bill type to the output
         for (Map.Entry<BillDenomination, Integer> entry : register.descendingMap().entrySet()) {
-            contents.append(" $" + entry.getKey().getAmount() + "x" + entry.getValue());
+            contents.append(" $").append(entry.getKey().getAmount()).append("x").append(entry.getValue());
         }
 
         return contents.toString();

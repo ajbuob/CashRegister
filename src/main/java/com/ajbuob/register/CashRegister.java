@@ -5,9 +5,6 @@ import com.ajbuob.register.exception.InsufficientFundsException;
 
 import java.util.Map;
 
-/**
- * Created by abuob on 1/31/17.
- */
 public interface CashRegister {
 
     /**

@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-/**
- * Created by abuob on 1/31/17.
- */
 public class OptimalChangeStrategy implements ChangeStrategy {
 
     private static final Integer ZERO = 0;

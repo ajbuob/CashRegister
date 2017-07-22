@@ -10,9 +10,6 @@ import java.util.TreeMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Created by abuob on 2/1/17.
- */
 public class OptimalChangeStrategyTest {
 
     private static final Integer ZERO = 0;
@@ -301,7 +298,7 @@ public class OptimalChangeStrategyTest {
 
         for (Map.Entry<BillDenomination, Integer> entry : change.descendingMap().entrySet()) {
             total = total + entry.getKey().getAmount() * entry.getValue();
-            contents.append(" $" + entry.getKey().getAmount() + "x" + entry.getValue());
+            contents.append(" $").append(entry.getKey().getAmount()).append("x").append(entry.getValue());
         }
         return "Total=$" + total + contents.toString();
     }
