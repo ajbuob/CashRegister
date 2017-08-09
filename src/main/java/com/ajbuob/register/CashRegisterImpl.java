@@ -95,9 +95,9 @@ public class CashRegisterImpl implements CashRegister {
 
     @Override
     public boolean canMakeChange(Integer amount) {
-        //An amount larger than what is in the register or if the
-        //provided strategy can not make change will indicate the cash register cant provide change
-        return amount > getRegisterTotal() || !changeStrategy.canMakeChangeForAmount(getRegister(), amount);
+        //An amount less than what is in the register AND
+        //the provided strategy must be able to make change for the given amount
+        return amount < getRegisterTotal() && changeStrategy.canMakeChangeForAmount(getRegister(), amount);
     }
 
     @Override
