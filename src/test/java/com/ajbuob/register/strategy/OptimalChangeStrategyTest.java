@@ -302,7 +302,4 @@ public class OptimalChangeStrategyTest {
         }
         return "Total=$" + total + contents.toString();
     }
-
 }
-
-
