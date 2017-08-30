@@ -52,7 +52,7 @@ public class OptimalChangeStrategy implements ChangeStrategy {
             }
         }
         //Zero remaining indicates change can be made from the register
-        if (remaining == ZERO) {
+        if (remaining.equals(ZERO)) {
             changeList.add(change);
         }
         return changeList;

@@ -23,7 +23,7 @@ $10  $5  $2  $1   RESULT
 
 0    2   1   1     PASS
 
-0    1   4   0     FAIL - would pass with a different non-optimal strategy as $5 is fist taken for tring to make change
+0    1   4   0     FAIL - would pass with a different non-optimal strategy as $5 is fist taken for trying to make change
 
 0    1   3   2     PASS
 

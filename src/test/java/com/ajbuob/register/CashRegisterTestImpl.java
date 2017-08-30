@@ -24,9 +24,9 @@ public class CashRegisterTestImpl {
     private CashRegister cashRegisterFail = null;
     private static final Integer ZERO = 0;
 
-    private ChangeStrategy changeStrategy = new OptimalChangeStrategy();
-    private ChangeStrategy changeStrategyMockSuccess = Mockito.mock(ChangeStrategy.class);
-    private ChangeStrategy changeStrategyMockFailure = Mockito.mock(ChangeStrategy.class);
+    private final ChangeStrategy changeStrategy = new OptimalChangeStrategy();
+    private final ChangeStrategy changeStrategyMockSuccess = Mockito.mock(ChangeStrategy.class);
+    private final ChangeStrategy changeStrategyMockFailure = Mockito.mock(ChangeStrategy.class);
 
     @Before
     public void setup() {

@@ -25,7 +25,7 @@ public interface CashRegister {
     void removeBillsFromRegister(Map<BillDenomination, Integer> debitBills);
 
     /**
-     * Determines if change can be made for ther given dollar amount from the register
+     * Determines if change can be made for the given dollar amount from the register
      *
      * @param amount the dollar amount requested for change
      * @return indicator if change can be made successfully or not

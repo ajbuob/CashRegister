@@ -8,8 +8,8 @@ public enum BillDenomination {
     TEN("ten", 10),
     TWENTY("twenty", 20);
 
-    private String description;
-    private int amount;
+    private final String description;
+    private final int amount;
 
     BillDenomination(String description, int amount) {
         this.description = description;
